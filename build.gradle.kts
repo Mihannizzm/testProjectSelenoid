@@ -11,9 +11,9 @@ repositories {
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
     implementation("com.codeborne:selenide:7.9.3")
-    testImplementation("org.testcontainers:testcontainers:1.21.0")
+    implementation("org.testcontainers:testcontainers:1.21.0")
 }
 
 tasks.test {

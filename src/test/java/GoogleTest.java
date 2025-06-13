@@ -1,6 +1,6 @@
 import com.codeborne.selenide.Configuration;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -16,7 +16,6 @@ public class GoogleTest {
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
 
-        // Если нужна поддержка видео и VNC:
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("enableVNC", true);
         capabilities.setCapability("enableVideo", false); // или true, если настроено
