@@ -2,6 +2,7 @@ package tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.webdriver.RemoteDriverFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -56,7 +57,7 @@ public class GoogleTestWithSelenoid {
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
-                        .withExposedPorts(9090)
+                        .withExposedPorts(8080)
                         .withNetwork(network)
                         .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
         selenoidUi.start();
@@ -67,18 +68,16 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("browserVersion", "128.0");
-
-// Selenoid-specific capabilities
-        chromeOptions.setCapability("enableVNC", true); // если хочешь видеть UI в Selenoid UI
-        chromeOptions.setCapability("enableVideo", false); // true — если нужно видео
-        chromeOptions.setCapability("selenoid:options", Map.of(
-                "sessionTimeout", "5m" // или больше, по необходимости
-        ));
-
+        chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--ignore-certificate-errors");
+        chromeOptions.addArguments("--ignore-urlfetcher-cert-requests");
+        chromeOptions.addArguments("--enable-automation");
+        chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--disable-browser-side-navigation");
+        chromeOptions.addArguments("--disable-gpu");
 
         Configuration.remote = host;
         Configuration.browserCapabilities = chromeOptions;
