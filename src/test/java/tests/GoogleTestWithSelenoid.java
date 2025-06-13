@@ -45,10 +45,10 @@ public class GoogleTestWithSelenoid {
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("enableVNC", true);
-        capabilities.setCapability("enableVideo", false); // или true, если настроено
-        Configuration.browserCapabilities = capabilities;
+//        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setCapability("enableVNC", true);
+//        capabilities.setCapability("enableVideo", false); // или true, если настроено
+//        Configuration.browserCapabilities = capabilities;
     }
 
     @Test
