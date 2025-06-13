@@ -12,6 +12,7 @@ import org.testcontainers.utility.MountableFile;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
@@ -66,9 +67,18 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setCapability("browserVersion", "128.0");
         chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.setCapability("browserVersion", "128.0");
+
+// Selenoid-specific capabilities
+        chromeOptions.setCapability("enableVNC", true); // если хочешь видеть UI в Selenoid UI
+        chromeOptions.setCapability("enableVideo", false); // true — если нужно видео
+        chromeOptions.setCapability("selenoid:options", Map.of(
+                "sessionTimeout", "5m" // или больше, по необходимости
+        ));
+
         chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
 
         Configuration.remote = host;
         Configuration.browserCapabilities = chromeOptions;
