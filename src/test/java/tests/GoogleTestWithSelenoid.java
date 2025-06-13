@@ -3,10 +3,8 @@ package tests;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.images.RemoteDockerImage;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -22,7 +20,7 @@ public class GoogleTestWithSelenoid {
         GenericContainer<?> selenoid =
                 new GenericContainer<>(DockerImageName.parse("aerokube/selenoid"))
                         .withCommand()
-                .withExposedPorts(4444)
+                        .withExposedPorts(4444)
                         .withNetwork(network)
                         .withNetworkAliases("selenoid")
                         .withCopyFileToContainer(
@@ -39,7 +37,10 @@ public class GoogleTestWithSelenoid {
         selenoid.start();
         selenoidUi.start();
 
-        Configuration.remote = "http://88.210.20.169:4444/wd/hub";
+        String selenoidHost = selenoid.getHost(); // обычно "localhost"
+        Integer selenoidPort = selenoid.getMappedPort(4444);
+
+        Configuration.remote = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
