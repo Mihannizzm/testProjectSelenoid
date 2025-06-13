@@ -30,7 +30,8 @@ public class GoogleTestWithSelenoid {
                         .withCopyFileToContainer(
                                 MountableFile.forClasspathResource("browsers.json"),
                                 "/etc/selenoid/browsers.json"
-                        );
+                        )
+                        .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock");
         selenoid.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
