@@ -39,9 +39,9 @@ public class GoogleTestWithSelenoid {
         selenoid.start();
         selenoidUi.start();
 
-        Configuration.remote = "http://88.210.20.169:4444/";
+        Configuration.remote = "http://88.210.20.169:4444/wd/hub";
         Configuration.browser = "chrome";
-        Configuration.browserVersion = "128.0"; // зависит от образа
+//        Configuration.browserVersion = "128.0";
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
 
