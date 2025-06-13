@@ -8,16 +8,20 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import java.util.Arrays;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class GoogleTestWithSelenoid {
 
     private static final Network network = Network.newNetwork();
+    private GenericContainer<?> selenoid;
+    GenericContainer<?> selenoidUi;
 
     @BeforeEach
     void beforeEach() {
-        GenericContainer<?> selenoid =
+        selenoid =
                 new GenericContainer<>(DockerImageName.parse("aerokube/selenoid"))
                         .withCommand()
                         .withExposedPorts(4444)
@@ -27,21 +31,25 @@ public class GoogleTestWithSelenoid {
                                 MountableFile.forClasspathResource("browsers.json"),
                                 "/etc/selenoid/browsers.json"
                         );
-
-        GenericContainer<?> selenoidUi =
-                new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
-                        .withExposedPorts(9090)
-                        .withNetwork(network)
-                        .withEnv("SELENOID_URI", "http://88.210.20.169:4444");
-
         selenoid.start();
-        selenoidUi.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
         Integer selenoidPort = selenoid.getMappedPort(4444);
         System.out.println("Логи контейнера: " + selenoid.getLogs());
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
+
+        selenoidUi =
+                new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
+                        .withExposedPorts(9090)
+                        .withNetwork(network)
+                        .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
+        selenoidUi.start();
+
+        System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
+        System.out.println("Логи контейнера selenoidUi: " + selenoidUi.getLogs());
         System.out.println("Хост --->  " + host);
+
+
         Configuration.remote = host;
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
@@ -51,7 +59,14 @@ public class GoogleTestWithSelenoid {
 
     @Test
     public void testExample() {
-        open("https://www.google.com/");
+        try {
+            open("https://www.google.com/");
+        } catch (Exception e) {
+            System.out.println("\nЛоги контейнера selenoid: " + selenoid.getLogs());
+            System.out.println("\nЛоги контейнера selenoidUi: " + selenoidUi.getLogs());
+            System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
+        }
+
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
         $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
         sleep(10000);
