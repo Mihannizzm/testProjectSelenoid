@@ -61,13 +61,14 @@ public class GoogleTestWithSelenoid {
 
     @Test
     public void testExample() throws InterruptedException {
-        Thread.sleep(300000);
+
         try {
             open("https://www.google.com/");
         } catch (Exception e) {
             System.out.println("\nЛоги контейнера selenoid: " + selenoid.getLogs());
             System.out.println("\nЛоги контейнера selenoidUi: " + selenoidUi.getLogs());
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
+            Thread.sleep(300000);
         }
 
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
