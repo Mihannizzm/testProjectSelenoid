@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
@@ -52,10 +53,13 @@ public class GoogleTestWithSelenoid {
         System.out.println("Хост --->  " + host);
 
 
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setCapability("browserVersion", "128.0");
+        chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.addArguments("--no-sandbox");
+
         Configuration.remote = host;
-        Configuration.browser = "chrome";
-        Configuration.browserSize = "1920x1080";
-        Configuration.timeout = 10000;
+        Configuration.browserCapabilities = chromeOptions;
 
     }
 
