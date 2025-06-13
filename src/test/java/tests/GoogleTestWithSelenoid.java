@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
+import org.testcontainers.images.RemoteDockerImage;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -20,6 +21,7 @@ public class GoogleTestWithSelenoid {
     void beforeEach() {
         GenericContainer<?> selenoid =
                 new GenericContainer<>(DockerImageName.parse("aerokube/selenoid"))
+                        .withCommand()
                 .withExposedPorts(4444)
                         .withNetwork(network)
                         .withNetworkAliases("selenoid")
