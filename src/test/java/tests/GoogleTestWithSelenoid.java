@@ -10,6 +10,7 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -19,7 +20,8 @@ public class GoogleTestWithSelenoid {
 
     private static final Network network = Network.newNetwork();
     private GenericContainer<?> selenoid;
-    GenericContainer<?> selenoidUi;
+    private GenericContainer<?> selenoidUi;
+    private String projectRoot = Paths.get("").toAbsolutePath().getParent().toString();
 
     @BeforeEach
     void beforeEach() {
@@ -33,7 +35,9 @@ public class GoogleTestWithSelenoid {
                                 MountableFile.forClasspathResource("browsers.json"),
                                 "/etc/selenoid/browsers.json"
                         )
-                        .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock");
+                        .withFileSystemBind(projectRoot.concat("/.selenoid/config/"), "/etc/selenoid")
+                        .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock")
+                        .withFileSystemBind(projectRoot.concat("/video/"), "/opt/selenoid/video");
         selenoid.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
