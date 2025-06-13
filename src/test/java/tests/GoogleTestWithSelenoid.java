@@ -1,6 +1,7 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
@@ -59,7 +60,8 @@ public class GoogleTestWithSelenoid {
     }
 
     @Test
-    public void testExample() {
+    public void testExample() throws InterruptedException {
+        Thread.sleep(300000);
         try {
             open("https://www.google.com/");
         } catch (Exception e) {
