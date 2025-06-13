@@ -68,8 +68,8 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setCapability("browserVersion", "128.0");
-        chromeOptions.setCapability("browserName", "chrome");
+//        chromeOptions.setCapability("browserVersion", "128.0");
+//        chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--ignore-certificate-errors");
         chromeOptions.addArguments("--ignore-urlfetcher-cert-requests");
