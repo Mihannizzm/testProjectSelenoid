@@ -90,6 +90,8 @@ public class GoogleTestWithSelenoid {
 
         try {
             open("https://www.google.com/");
+            System.out.println("\nЛоги контейнера selenoid после старта сессии: " + selenoid.getLogs());
+            System.out.println("\nЛоги контейнера selenoidUi после старта сессии: " + selenoidUi.getLogs());
         } catch (Exception e) {
             System.out.println("\nЛоги контейнера selenoid: " + selenoid.getLogs());
             System.out.println("\nЛоги контейнера selenoidUi: " + selenoidUi.getLogs());
