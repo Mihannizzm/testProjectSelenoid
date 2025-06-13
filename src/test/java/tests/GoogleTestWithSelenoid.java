@@ -25,19 +25,28 @@ public class GoogleTestWithSelenoid {
 
     @BeforeEach
     void beforeEach() {
-        selenoid =
-                new GenericContainer<>(DockerImageName.parse("aerokube/selenoid"))
-                        .withCommand()
-                        .withExposedPorts(4444)
-                        .withNetwork(network)
-                        .withNetworkAliases("selenoid")
-                        .withCopyFileToContainer(
-                                MountableFile.forClasspathResource("browsers.json"),
-                                "/etc/selenoid/browsers.json"
-                        )
-                        .withFileSystemBind(projectRoot.concat("/.selenoid/config/"), "/etc/selenoid")
-                        .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock")
-                        .withFileSystemBind(projectRoot.concat("/video/"), "/opt/selenoid/video");
+        selenoid = new GenericContainer<>("aerokube/selenoid")
+                .withNetwork(network)
+                .withNetworkAliases("selenoid")
+                .withExposedPorts(4444)
+                .withCommand(
+                        "-limit", "1",
+                        "-conf", "/etc/selenoid/browsers.json",
+                        "-video-output-dir", "/opt/selenoid/video",
+                        "-video-recorder-image", "selenoid/video-recorder",
+                        "-log-output-dir", "/opt/selenoid/logs",
+                        "-container-network", network.getId(),
+                        "-timeout", "%sm".formatted(5)
+                )
+                .withEnv("TZ", "Europe/Moscow")
+                .withEnv("LANG", "en_US:en")
+                .withEnv("LANGUAGE", "en_US:en")
+                .withEnv("LC_ALL", "en_US.UTF-8")
+                .withEnv("OVERRIDE_VIDEO_OUTPUT_DIR", projectRoot.concat("/video"))
+                .withEnv("JAVA_OPTS", "-Xmx1024m")
+                .withFileSystemBind(projectRoot.concat("/.selenoid/config/"), "/etc/selenoid")
+                .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock")
+                .withFileSystemBind(projectRoot.concat("/video/"), "/opt/selenoid/video");
         selenoid.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
@@ -45,8 +54,7 @@ public class GoogleTestWithSelenoid {
         System.out.println("Логи контейнера: " + selenoid.getLogs());
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
-        selenoidUi =
-                new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
+        selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
                         .withExposedPorts(9090)
                         .withNetwork(network)
                         .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
