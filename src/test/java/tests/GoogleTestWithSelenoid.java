@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -26,10 +27,10 @@ public class GoogleTestWithSelenoid {
         selenoid = new GenericContainer<>("aerokube/selenoid")
                 .withNetwork(network)
                 .withNetworkAliases("selenoid")
-                .withExposedPorts(5555)
+                .withExposedPorts(4444)
                 .withCommand(
                         "-limit", "1",
-                        "-conf", "/etc/selenoid/browsers.json",
+//                        "-conf", "/etc/selenoid/browsers.json",
                         "-video-output-dir", "/opt/selenoid/video",
                         "-video-recorder-image", "selenoid/video-recorder",
                         "-log-output-dir", "/opt/selenoid/logs",
@@ -42,13 +43,17 @@ public class GoogleTestWithSelenoid {
                 .withEnv("LC_ALL", "en_US.UTF-8")
                 .withEnv("OVERRIDE_VIDEO_OUTPUT_DIR", projectRoot.concat("/video"))
                 .withEnv("JAVA_OPTS", "-Xmx1024m")
+                .withCopyFileToContainer(
+                        MountableFile.forClasspathResource("browsers.json"),
+                        "/etc/selenoid/browsers.json"
+                )
                 .withFileSystemBind(projectRoot.concat("/.selenoid/config/"), "/etc/selenoid")
                 .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock")
                 .withFileSystemBind(projectRoot.concat("/video/"), "/opt/selenoid/video");
         selenoid.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
-        Integer selenoidPort = selenoid.getMappedPort(5555);
+        Integer selenoidPort = selenoid.getMappedPort(4444);
         System.out.println("Логи контейнера: " + selenoid.getLogs());
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
