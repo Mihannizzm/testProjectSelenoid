@@ -1,19 +1,15 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.webdriver.RemoteDriverFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
-import org.testcontainers.utility.MountableFile;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Map;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
@@ -30,7 +26,7 @@ public class GoogleTestWithSelenoid {
         selenoid = new GenericContainer<>("aerokube/selenoid")
                 .withNetwork(network)
                 .withNetworkAliases("selenoid")
-                .withExposedPorts(4444)
+                .withExposedPorts(5555)
                 .withCommand(
                         "-limit", "1",
                         "-conf", "/etc/selenoid/browsers.json",
@@ -52,14 +48,14 @@ public class GoogleTestWithSelenoid {
         selenoid.start();
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
-        Integer selenoidPort = selenoid.getMappedPort(4444);
+        Integer selenoidPort = selenoid.getMappedPort(5555);
         System.out.println("Логи контейнера: " + selenoid.getLogs());
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
-                        .withExposedPorts(8080)
-                        .withNetwork(network)
-                        .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
+                .withExposedPorts(8080)
+                .withNetwork(network)
+                .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
         selenoidUi.start();
 
         System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
