@@ -10,7 +10,9 @@ import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
@@ -69,7 +71,28 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.setCapability("enableVNC", true);
+
+        chromeOptions.setCapability("selenoid:options", new HashMap<String, Object>() {{
+            /* How to add test badge */
+            put("name", "Test badge...");
+
+            /* How to set session timeout */
+            put("sessionTimeout", "15m");
+
+            /* How to set timezone */
+            put("env", new ArrayList<String>() {{
+                add("TZ=UTC");
+            }});
+
+            /* How to add "trash" button */
+            put("labels", new HashMap<String, Object>() {{
+                put("manual", "true");
+            }});
+
+            /* How to enable video recording */
+            put("enableVideo", true);
+        }});
+
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--ignore-certificate-errors");
         chromeOptions.addArguments("--ignore-urlfetcher-cert-requests");
@@ -97,8 +120,9 @@ public class GoogleTestWithSelenoid {
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
 
+        sleep(600000);
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
         $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
-        sleep(600000);
+
     }
 }
