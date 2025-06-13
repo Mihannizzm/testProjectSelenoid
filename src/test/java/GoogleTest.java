@@ -1,16 +1,26 @@
 import com.codeborne.selenide.Configuration;
-import org.junit.After;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class GoogleTest {
 
-    @AfterEach
-    void afterEach() {
-        Configuration.remote = "http://88.210.20.169/4444";
+    @BeforeEach
+    void beforeEach() {
+        Configuration.remote = "http://88.210.20.169:4444/";
+        Configuration.browser = "chrome";
+        Configuration.browserVersion = "128.0"; // зависит от образа
+        Configuration.browserSize = "1920x1080";
+        Configuration.timeout = 10000;
+
+        // Если нужна поддержка видео и VNC:
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("enableVNC", true);
+        capabilities.setCapability("enableVideo", false); // или true, если настроено
+        Configuration.browserCapabilities = capabilities;
     }
 
     @Test
