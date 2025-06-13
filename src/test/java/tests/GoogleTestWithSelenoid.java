@@ -39,8 +39,10 @@ public class GoogleTestWithSelenoid {
 
         String selenoidHost = selenoid.getHost(); // обычно "localhost"
         Integer selenoidPort = selenoid.getMappedPort(4444);
-
-        Configuration.remote = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
+        System.out.println("Логи контейнера: " + selenoid.getLogs());
+        String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
+        System.out.println("Хост --->  " + host);
+        Configuration.remote = host;
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
