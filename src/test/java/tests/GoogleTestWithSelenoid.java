@@ -120,7 +120,7 @@ public class GoogleTestWithSelenoid {
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
 
-        sleep(600000);
+        sleep(300000);
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
         $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
 
