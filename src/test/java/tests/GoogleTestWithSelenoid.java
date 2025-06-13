@@ -41,14 +41,9 @@ public class GoogleTestWithSelenoid {
 
         Configuration.remote = "http://88.210.20.169:4444/wd/hub";
         Configuration.browser = "chrome";
-//        Configuration.browserVersion = "128.0";
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
 
-//        DesiredCapabilities capabilities = new DesiredCapabilities();
-//        capabilities.setCapability("enableVNC", true);
-//        capabilities.setCapability("enableVideo", false); // или true, если настроено
-//        Configuration.browserCapabilities = capabilities;
     }
 
     @Test
