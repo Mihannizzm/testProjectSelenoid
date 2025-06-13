@@ -69,7 +69,7 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setCapability("enableVNC", true);
+//        chromeOptions.setCapability("enableVNC", true);
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--ignore-certificate-errors");
         chromeOptions.addArguments("--ignore-urlfetcher-cert-requests");
