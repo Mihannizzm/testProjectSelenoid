@@ -34,7 +34,7 @@ public class GoogleTestWithSelenoid {
                         "-limit", "1",
 //                        "-conf", "/etc/selenoid/browsers.json",
                         "-video-output-dir", "/opt/selenoid/video",
-                        "-video-recorder-image", "selenoid/video-recorder",
+                        "-video-recorder-image", "selenoid/video-recorder:latest-release",
                         "-log-output-dir", "/opt/selenoid/logs",
                         "-container-network", network.getId(),
                         "-timeout", "%sm".formatted(5)
@@ -62,7 +62,9 @@ public class GoogleTestWithSelenoid {
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
                 .withExposedPorts(8080)
                 .withNetwork(network)
-                .withEnv("SELENOID_URI", "http://" + selenoidHost + ":" + selenoidPort);
+                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(
+                        4444
+                ));
         selenoidUi.start();
 
         System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
@@ -91,6 +93,8 @@ public class GoogleTestWithSelenoid {
 
             /* How to enable video recording */
             put("enableVideo", true);
+
+            put("enableVnc", true);
         }});
 
         chromeOptions.addArguments("--no-sandbox");
@@ -119,7 +123,7 @@ public class GoogleTestWithSelenoid {
             System.out.println("\nЛоги контейнера selenoidUi: " + selenoidUi.getLogs());
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
-
+        System.out.println("Дошли до sleep");
         sleep(300000);
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
         $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
