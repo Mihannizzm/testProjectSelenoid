@@ -69,8 +69,7 @@ public class GoogleTestWithSelenoid {
 
 
         ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.setCapability("browserVersion", "128.0");
-//        chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.setCapability("enableVNC", true);
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--ignore-certificate-errors");
         chromeOptions.addArguments("--ignore-urlfetcher-cert-requests");
@@ -100,6 +99,6 @@ public class GoogleTestWithSelenoid {
 
         $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
         $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
-        sleep(10000);
+        sleep(600000);
     }
 }
