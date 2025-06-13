@@ -10,10 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation("com.codeborne:selenide:7.9.3")
-    implementation(platform("org.junit:junit-bom:5.13.1"))
-    implementation("org.junit.jupiter:junit-jupiter")
-    runtimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("com.codeborne:selenide:7.9.3")
+    testImplementation(platform("org.junit:junit-bom:5.13.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
