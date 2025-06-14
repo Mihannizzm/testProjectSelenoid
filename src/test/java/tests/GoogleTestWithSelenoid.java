@@ -122,10 +122,11 @@ public class GoogleTestWithSelenoid {
             System.out.println("\nЛоги контейнера selenoidUi при ошибке: " + selenoidUi.getLogs());
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
+        $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
+        $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
+
         System.out.println("Дошли до sleep");
         sleep(300000);
-//        $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
-//        $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
 
     }
 }
