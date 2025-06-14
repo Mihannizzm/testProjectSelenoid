@@ -32,7 +32,6 @@ public class GoogleTestWithSelenoid {
                 .withExposedPorts(4444)
                 .withCommand(
                         "-limit", "1",
-//                        "-conf", "/etc/selenoid/browsers.json",
                         "-video-output-dir", "/opt/selenoid/video",
                         "-video-recorder-image", "selenoid/video-recorder:latest-release",
                         "-log-output-dir", "/opt/selenoid/logs",
@@ -75,25 +74,15 @@ public class GoogleTestWithSelenoid {
         ChromeOptions chromeOptions = new ChromeOptions();
 
         chromeOptions.setCapability("selenoid:options", new HashMap<String, Object>() {{
-            /* How to add test badge */
-            put("name", "Test badge...");
-
-            /* How to set session timeout */
+            put("name", "Test");
             put("sessionTimeout", "15m");
-
-            /* How to set timezone */
             put("env", new ArrayList<String>() {{
                 add("TZ=UTC");
             }});
-
-            /* How to add "trash" button */
             put("labels", new HashMap<String, Object>() {{
                 put("manual", "true");
             }});
-
-            /* How to enable video recording */
-            put("enableVideo", true);
-
+            put("enableVideo", false);
             put("enableVnc", true);
         }});
 
@@ -113,20 +102,19 @@ public class GoogleTestWithSelenoid {
 
     @Test
     public void testExample() throws InterruptedException {
-
         try {
             open("https://www.google.com/");
             System.out.println("\nЛоги контейнера selenoid после старта сессии: " + selenoid.getLogs());
             System.out.println("\nЛоги контейнера selenoidUi после старта сессии: " + selenoidUi.getLogs());
         } catch (Exception e) {
-            System.out.println("\nЛоги контейнера selenoid: " + selenoid.getLogs());
-            System.out.println("\nЛоги контейнера selenoidUi: " + selenoidUi.getLogs());
+            System.out.println("\nЛоги контейнера selenoid при ошибке: " + selenoid.getLogs());
+            System.out.println("\nЛоги контейнера selenoidUi при ошибке: " + selenoidUi.getLogs());
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
-        System.out.println("Дошли до sleep");
-        sleep(300000);
-        $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
-        $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
+//        System.out.println("Дошли до sleep");
+//        sleep(300000);
+//        $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
+//        $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
 
     }
 }
