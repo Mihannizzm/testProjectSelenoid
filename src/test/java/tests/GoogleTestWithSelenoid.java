@@ -94,6 +94,7 @@ public class GoogleTestWithSelenoid {
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--disable-browser-side-navigation");
         chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--headless");
 
         Configuration.remote = host;
         Configuration.browserCapabilities = chromeOptions;
@@ -111,8 +112,8 @@ public class GoogleTestWithSelenoid {
             System.out.println("\nЛоги контейнера selenoidUi при ошибке: " + selenoidUi.getLogs());
             System.out.println("\n еще логи ->>>> " + Arrays.toString(e.getStackTrace()));
         }
-//        System.out.println("Дошли до sleep");
-//        sleep(300000);
+        System.out.println("Дошли до sleep");
+        sleep(300000);
 //        $x("//*[@aria-label='Найти']").shouldBe(visible).setValue("Привет");
 //        $x("(//*[@value='Поиск в Google'])[1]").shouldBe(visible).click();
 
