@@ -1,6 +1,10 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -61,10 +65,14 @@ public class GoogleTestWithSelenoid {
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
 //                .withExposedPorts(8080)
                 .withNetwork(network)
-                .withCommand("-p 8080:8888")
-                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(
-                        4444
-                ));
+                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(4444))
+                .withCreateContainerCmdModifier(cmd ->
+                                cmd.withHostConfig(
+                                        new HostConfig().withPortBindings(
+                                                new PortBinding(Ports.Binding.bindPort(8888), new ExposedPort(8080))
+                                        )
+                                )
+                );
         selenoidUi.start();
 
         System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
