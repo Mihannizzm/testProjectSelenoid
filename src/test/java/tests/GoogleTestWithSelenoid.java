@@ -61,7 +61,7 @@ public class GoogleTestWithSelenoid {
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
 //                .withExposedPorts(8080)
                 .withNetwork(network)
-                .withCommand("-p 8080:32853 --selenoid-uri=http://selenoid:%s".formatted(
+                .withCommand("-p 8080:8888 --selenoid-uri=http://selenoid:%s".formatted(
                         4444
                 ));
         selenoidUi.start();
