@@ -104,7 +104,7 @@ public class GoogleTestWithSelenoid {
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--disable-browser-side-navigation");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.addArguments("--headless");
+//        chromeOptions.addArguments("--headless");
 
         Configuration.remote = host;
         Configuration.browserCapabilities = chromeOptions;
