@@ -63,16 +63,17 @@ public class GoogleTestWithSelenoid {
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
-//                .withExposedPorts(8080)
+                .withExposedPorts(8080)
                 .withNetwork(network)
-                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(4444))
-                .withCreateContainerCmdModifier(cmd ->
-                                cmd.withHostConfig(
-                                        new HostConfig().withPortBindings(
-                                                new PortBinding(Ports.Binding.bindPort(8888), new ExposedPort(8080))
-                                        )
-                                )
-                );
+                .withNetworkAliases("selenoid")
+                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(4444));
+//                .withCreateContainerCmdModifier(cmd ->
+//                                cmd.withHostConfig(
+//                                        new HostConfig().withPortBindings(
+//                                                new PortBinding(Ports.Binding.bindPort(8888), new ExposedPort(8080))
+//                                        )
+//                                )
+//                );
         selenoidUi.start();
 
         System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
