@@ -1,10 +1,6 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -63,17 +59,17 @@ public class GoogleTestWithSelenoid {
         String host = "http://" + selenoidHost + ":" + selenoidPort + "/wd/hub";
 
         selenoidUi = new GenericContainer<>(DockerImageName.parse("aerokube/selenoid-ui"))
-//                .withExposedPorts(8080)
+                .withExposedPorts(8080)
                 .withNetwork(network)
                 .withNetworkAliases("selenoid")
-                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(4444))
-                .withCreateContainerCmdModifier(cmd ->
-                                cmd.withHostConfig(
-                                        new HostConfig().withPortBindings(
-                                                new PortBinding(Ports.Binding.bindPort(32870), new ExposedPort(8080))
-                                        )
-                                )
-                );
+                .withCommand("--selenoid-uri=http://selenoid:%s".formatted(4444));
+//                .withCreateContainerCmdModifier(cmd ->
+//                                cmd.withHostConfig(
+//                                        new HostConfig().withPortBindings(
+//                                                new PortBinding(Ports.Binding.bindPort(32870), new ExposedPort(8080))
+//                                        )
+//                                )
+//                );
         selenoidUi.start();
 
         System.out.println("Логи контейнера selenoid: " + selenoid.getLogs());
@@ -115,6 +111,7 @@ public class GoogleTestWithSelenoid {
     public void testExample() throws InterruptedException {
         try {
             open("https://www.google.com/");
+            System.out.println("Порт на котором запущен selenoid ui: " + selenoid.getMappedPort(8080));
             System.out.println("\nЛоги контейнера selenoid после старта сессии: " + selenoid.getLogs());
             System.out.println("\nЛоги контейнера selenoidUi после старта сессии: " + selenoidUi.getLogs());
         } catch (Exception e) {
